@@ -20,7 +20,8 @@
 					this.fields = {
 						userName: document.getElementById("userName"),
 						userEmail: document.getElementById("userEmail"),
-						userPassword: document.getElementById("userPassword")
+						userPassword: document.getElementById("userPassword"),
+						usercPassword: document.getElementById("usercPassword")
 					};
 					this.submitButton = document.getElementById("submitButton");
 				},
@@ -72,14 +73,26 @@
 						if (this.fields.hasOwnProperty(i)) {
 							input = this.fields[i];
 							//CHECK IF FIELD IS EMPTY
+							
 							if (input.value === "") {
 								//Add error class
 								this.addClass(input, classError);
 								//Else if the e-mail input filter is not passed
-							} else if (i === "userEmail" && !filter.test(input.value)) {
+							} 
+							else if (i === "userEmail" && !filter.test(input.value)) {
 								//Add error class
 								this.addClass(input, classError);
-							} else {
+							}
+							else if (i === "userPassword" && input.value.length  < 8 ) {
+								//Add error class
+								this.addClass(input, classError);
+							}
+							else if (i === "usercPassword" && input.value != userPassword.value ) {
+								//Add error class
+								this.addClass(input, classError);
+							}
+							
+							else {
 								//Input is valid, continue looping
 								this.addClass(input, classSuccess);
 								validFields += 1;
@@ -87,7 +100,7 @@
 						}
 					}
 					//If all inputs are valid
-					if (validFields === 3) {
+					if (validFields === 4) {
 						//Submit
 						this.submitForm();
 					}
@@ -103,16 +116,27 @@
 					input.parentElement.classList.add(clss);
 				},
 				errorMessage: function(input) {
-					var message;
+					var message = '';
 					//IF USERNAME HAS ERROR
+					//console.log(input);
 					if (input === this.fields.userName) {
 						message = "You forgot your name!";
 						//ELSE IF USEREMAIL HAS ERROR
-					} else if (input === this.fields.userEmail) {
+					} 
+					
+					if (input === this.fields.userEmail) {
 						message = "E-mail address invalid!";
 						//ELSE IF userPassword HAS ERROR
-					} else if (input === this.fields.userPassword) {
-						message = "You forgot your feedback!";
+					} 
+					
+					if(input.id == 'userPassword'){
+						
+						if(input.value.length < 8){ message = "Password must be 8 characters!"; }
+					}
+					
+					if(input.id == 'usercPassword'){
+						if ( input.value.length == 0 ) { message = "You forgot your confirm password!"; }
+						if(input.value != userPassword.value){ message = "Passwords do not match!"; }
 					}
 					this.addError(input, message);
 				},
